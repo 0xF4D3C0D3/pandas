@@ -63,7 +63,6 @@ from pandas.core.groupby.groupby import (
     _transform_template,
     groupby,
 )
-from pandas.core.groupby.ops import BinGrouper
 from pandas.core.index import Index, MultiIndex, _all_indexes_same
 import pandas.core.indexes.base as ibase
 from pandas.core.internals import BlockManager, make_block
@@ -652,12 +651,7 @@ class SeriesGroupBy(GroupBy):
         rep = partial(np.repeat, repeats=np.add.reduceat(inc, idx))
 
         # multi-index components
-        if isinstance(self.grouper, BinGrouper) and (
-            len(self.grouper.binlabels) != len(self.grouper.indices)
-        ):
-            labels = list(map(rep, [np.unique(ids)])) + [llab(lab, inc)]
-        else:
-            labels = list(map(rep, self.grouper.recons_labels)) + [llab(lab, inc)]
+        labels = list(map(rep, self.grouper.recons_labels)) + [llab(lab, inc)]
         levels = [ping.group_index for ping in self.grouper.groupings] + [lev]
         names = self.grouper.names + [self._selection_name]
 

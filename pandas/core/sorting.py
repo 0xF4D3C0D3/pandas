@@ -162,12 +162,12 @@ def decons_obs_group_ids(comp_ids, obs_ids, shape, labels, xnull):
     xnull: boolean,
         if nulls are excluded; i.e. -1 labels are passed through
     """
-
+    #breakpoint()
     if not xnull:
         lift = np.fromiter(((a == -1).any() for a in labels), dtype="i8")
         shape = np.asarray(shape, dtype="i8") + lift
 
-    if not is_int64_overflow_possible(shape):
+    if False and not is_int64_overflow_possible(shape):
         # obs ids are deconstructable! take the fast route!
         out = decons_group_index(obs_ids, shape)
         return out if xnull or not lift.any() else [x - y for x, y in zip(out, lift)]
